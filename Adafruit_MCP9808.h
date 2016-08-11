@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*! 
     @file     Adafruit_MCP9808.h
-    @author   K. Townsend (Adafruit Industries)
+    @author   K. Townsend (Adafruit Industries), M. Fuhrmann
 	@license  BSD (see license.txt)
 	
 	This is a library for the Adafruit MCP9808 Temp Sensor breakout board
@@ -14,6 +14,7 @@
 	@section  HISTORY
 
     v1.0  - First release
+	v1.1  - Add MCP resolution 
 */
 /**************************************************************************/
 
@@ -39,7 +40,7 @@
 #define MCP9808_REG_CONFIG_INTCLR      0x0020
 #define MCP9808_REG_CONFIG_ALERTSTAT   0x0010
 #define MCP9808_REG_CONFIG_ALERTCTRL   0x0008
-#define MCP9808_REG_CONFIG_ALERTSEL    0x0004
+#define MCP9808_REG_CONFIG_ALERTSEL    0x0002
 #define MCP9808_REG_CONFIG_ALERTPOL    0x0002
 #define MCP9808_REG_CONFIG_ALERTMODE   0x0001
 
@@ -49,6 +50,7 @@
 #define MCP9808_REG_AMBIENT_TEMP       0x05
 #define MCP9808_REG_MANUF_ID           0x06
 #define MCP9808_REG_DEVICE_ID          0x07
+#define MCP9808_RESOLUTION			   0x08
 
 class Adafruit_MCP9808 {
  public:
@@ -57,9 +59,17 @@ class Adafruit_MCP9808 {
   float readTempF( void );
   float readTempC( void );
   int shutdown_wake( uint8_t sw_ID );
+  
+  // MF - Just for DEBUG  
+  uint16_t raw;
+
 
   void write16(uint8_t reg, uint16_t val);
   uint16_t read16(uint8_t reg);
+
+  // MF - resolution is just one byte 
+  uint8_t read_resolution();
+  void write_resolution(uint8_t resolution);
 
  private:
 

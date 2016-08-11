@@ -117,6 +117,34 @@ void Adafruit_MCP9808::write16(uint8_t reg, uint16_t value) {
     Wire.endTransmission();
 }
 
+
+ 
+// MF - RESOLUTION REGISTER (? ADDRESS ‘0000 1000’b)  - 8 bit
+/*
+Resolution bits
+00 = +0.5°C (tCONV = 30 ms typical)
+01 = +0.25°C (tCONV = 65 ms typical)
+10 = +0.125°C (tCONV = 130 ms typical)
+11 = +0.0625°C (power-up default, tCONV = 250 ms typical)
+*/
+void Adafruit_MCP9808::write_resolution(uint8_t resolution) {
+	Wire.beginTransmission(_i2caddr);
+	Wire.write((uint8_t)MCP9808_RESOLUTION);
+	Wire.write(resolution & 0x03);
+	Wire.endTransmission();
+}
+
+// MF - RESOLUTION REGISTER (? ADDRESS ‘0000 1000’b)  - 8 bit
+uint8_t Adafruit_MCP9808::read_resolution() {
+	uint8_t val;
+	Wire.beginTransmission(_i2caddr);
+	Wire.write((uint8_t)MCP9808_RESOLUTION);
+	Wire.endTransmission();
+	Wire.requestFrom((uint8_t)_i2caddr, (uint8_t)1);
+	val = Wire.read();
+	return val;
+}
+
 uint16_t Adafruit_MCP9808::read16(uint8_t reg) {
   uint16_t val;
 
@@ -128,5 +156,8 @@ uint16_t Adafruit_MCP9808::read16(uint8_t reg) {
   val = Wire.read();
   val <<= 8;
   val |= Wire.read();  
+
+  raw = val;
+
   return val;  
 }
